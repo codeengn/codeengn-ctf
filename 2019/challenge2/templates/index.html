@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC>
+<html>
+<head>
+	<title>WASM Crackme</title>
+	<script>
+		const start = async function() {
+			btn.disabled = true
+			const res = await fetch('/generate')
+			const body = await res.blob()
+			btn.disabled = false
+			main(true)
+			return true
+		}
+
+		const main=async function(starting) {
+			const res = await fetch('/state')
+			const json = await res.json()
+			if(json.level > 8) {
+				flag.innerText = "FLAG: " + json.flag
+			}
+			if(json.current) {
+				let callback, start = new Date().getTime();
+				form.solution.disabled = form.btn.disabled = false
+				btn.onclick = () => {
+					trigger.href = '/current'
+					trigger.click()
+				}
+
+				if(starting) btn.click()
+
+				interval = setInterval(callback = () => {
+					let delta, remaining
+					delta = (new Date().getTime()) - start
+					remaining = 300 + (json.current_date - json.server_date - delta) / 1000 | 0
+					if(remaining < 0) {
+						location.reload()
+					}
+					btn.innerText = `Get current file (${remaining}) seconds remaining`
+				}, 1000)
+				callback()
+			}
+			level.innerText = json.level
+		}
+		let interval;
+	</script>
+</head>
+<body onload="main()">
+	Yes, it needed to happen. <b>WASM Crackme 200!</b>
+	<br>
+	umm.. joking. 200 is too much<!-- because wasm compiler is slow yet -->. Only 8 binaries will be generated.
+	<br>
+	Current level: <span id="level">(loading...)</span>/8
+
+	<h2>How to execute</h2>
+
+<pre><code># download by clicking "Start" and run command below (node &gt;= 8.x recommended)
+# find an input that prints "correct!" instead of ":("
+$ echo 90329119623006727 32623142023949713 79282196952454451 87534233702482428 48269713492821379 69766494725376786 133529648002508606 66282463893999929 | node ./chal.js
+correct!
+
+# Then, submit the solution to the form below, like this.
+# ex. 90329119623006727,32623142023949713,79282196952454451,87534233702482428,48269713492821379,69766494725376786,133529648002508606,66282463893999929 in the case above
+</code></pre>
+
+	<button onclick=start(event) id=btn>Start</button>
+	<a download="generated.zip" id="trigger"></a>
+	<form id="form" action="/solution" method="GET">
+		<input type="text" name="solution" disabled placeholder="8 integers seperated by comma (,)" style="width: 500px">
+		<button type="submit" name="btn" disabled>Submit solution</button>
+	</form>
+	<div id="flag"></div>
+</body>
+</html>
