@@ -2,8 +2,8 @@
 ### 2019
 ```
 challenge1
-1. 강우원 (wooeong337@gmail.com)
-2. 김범수 (dmbs335@naver.com)
+1. 강우원 (wo***@gmail.com)
+2. 김범수 (dm***@naver.com)
 
 challenge2
 안풀렸어요..
