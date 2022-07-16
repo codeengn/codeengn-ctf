@@ -1,5 +1,5 @@
 # CodeEngn CTF and Best Writeups
-https://codeengn.com/ctf
+https://codeengn.com
 
 ## 2019
 ```
